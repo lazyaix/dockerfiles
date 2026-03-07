@@ -36,4 +36,10 @@ RUN git clone https://github.com/ohmycmake/dotfiles.git /tmp/dotfiles && \
 # Pre-install nvim plugins (lazy.nvim will bootstrap on first run)
 RUN nvim --headless "+Lazy! sync" +qa || true
 
+# Install Claude Code
+RUN curl -fsSL https://claude.ai/install.sh | bash
+
+# Install Gemini CLI and Codex CLI
+RUN npm install -g @google/gemini-cli @openai/codex
+
 CMD ["/bin/bash"]
