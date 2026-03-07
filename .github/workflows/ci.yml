@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  pull_request:
+    paths:
+      - "images/**"
+      - "cmake/**"
+      - "CMakeLists.txt"
+      - ".github/workflows/ci.yml"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint base.dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: images/base/base.dockerfile
+
+      - name: Lint lazyaix.dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: images/lazyaix/lazyaix.dockerfile
+
+  build:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build base image
+        run: |
+          docker build -f images/base/base.dockerfile \
+            -t base:1.0.0 \
+            images/base/
+
+      - name: Build lazyaix image
+        run: |
+          docker build -f images/lazyaix/lazyaix.dockerfile \
+            --build-arg BASE_IMAGE=base:1.0.0 \
+            -t lazyaix:1.0.0 \
+            images/lazyaix/
+
+      - name: Smoke test
+        run: |
+          docker run --rm lazyaix:1.0.0 cmake --version
+          docker run --rm lazyaix:1.0.0 nvim --version
+          docker run --rm lazyaix:1.0.0 node --version
