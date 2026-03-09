@@ -45,9 +45,22 @@ RUN apt-get update && \
     ripgrep \
     fd-find \
     jq \
-    tmux && \
+    libevent-dev \
+    libncurses-dev \
+    bison && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Build tmux from source (latest release)
+ARG TMUX_VERSION=3.6a
+RUN curl -fsSL "https://github.com/tmux/tmux/releases/download/${TMUX_VERSION}/tmux-${TMUX_VERSION}.tar.gz" \
+    -o /tmp/tmux.tar.gz && \
+    tar -xzf /tmp/tmux.tar.gz -C /tmp && \
+    cd /tmp/tmux-${TMUX_VERSION} && \
+    ./configure --prefix=/usr/local && \
+    make -j"$(nproc)" && \
+    make install && \
+    rm -rf /tmp/tmux*
 
 # Install GitHub CLI
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
