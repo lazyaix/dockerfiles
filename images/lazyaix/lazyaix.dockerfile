@@ -27,11 +27,10 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
     nvm install 24
 ENV PATH="$NVM_DIR/versions/node/v24.14.0/bin:$PATH"
 
-# Clone dotfiles and setup nvim config
-RUN git clone https://github.com/ohmycmake/dotfiles.git /tmp/dotfiles && \
-    mkdir -p ~/.config && \
-    cp -r /tmp/dotfiles/nvim ~/.config/nvim && \
-    rm -rf /tmp/dotfiles
+# Clone dotfiles and symlink configs
+RUN git clone https://github.com/lazyaix/dotfiles.git ~/.config/dotfiles && \
+    ln -s ~/.config/dotfiles/nvim ~/.config/nvim && \
+    ln -s ~/.config/dotfiles/tmux ~/.config/tmux
 
 # Pre-install nvim plugins (lazy.nvim will bootstrap on first run)
 RUN nvim --headless "+Lazy! sync" +qa || true

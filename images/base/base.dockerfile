@@ -18,6 +18,7 @@ RUN apt-get update && \
     ca-certificates \
     gnupg \
     lsb-release \
+    locales \
     build-essential \
     gcc \
     g++ \
@@ -50,6 +51,11 @@ RUN apt-get update && \
     bison && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Generate UTF-8 locale (required for Nerd Font symbols in terminal)
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
 
 # Build tmux from source (latest release)
 ARG TMUX_VERSION=3.6a
