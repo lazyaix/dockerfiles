@@ -22,6 +22,7 @@ RUN apt-get update && \
     build-essential \
     gcc \
     g++ \
+    golang-go \
     clang \
     gdb \
     make \
