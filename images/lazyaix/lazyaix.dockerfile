@@ -45,4 +45,7 @@ RUN curl -fsSL https://claude.ai/install.sh | bash
 # Install Gemini CLI and Codex CLI
 RUN npm install -g @google/gemini-cli @openai/codex
 
-CMD ["/bin/bash"]
+EXPOSE 22
+
+# Start sshd in background, then drop into bash as lazyaix
+CMD ["sudo", "/usr/sbin/sshd", "-D"]

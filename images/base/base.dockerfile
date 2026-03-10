@@ -43,6 +43,8 @@ RUN apt-get update && \
     less \
     file \
     bash-completion \
+    openssh-client \
+    openssh-server \
     strace \
     ripgrep \
     fd-find \
@@ -52,6 +54,10 @@ RUN apt-get update && \
     bison && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Configure sshd
+RUN mkdir -p /run/sshd && \
+    ssh-keygen -A
 
 # Generate UTF-8 locale (required for Nerd Font symbols in terminal)
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
