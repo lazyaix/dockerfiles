@@ -32,8 +32,12 @@ RUN git clone https://github.com/lazyaix/dotfiles.git ~/.config/dotfiles && \
     ln -s ~/.config/dotfiles/nvim ~/.config/nvim && \
     ln -s ~/.config/dotfiles/tmux ~/.config/tmux
 
-# Pre-install nvim plugins (lazy.nvim will bootstrap on first run)
-RUN nvim --headless "+Lazy! sync" +qa || true
+# Pre-install nvim plugins (lazy.nvim bootstrap + plugin sync + build steps)
+RUN nvim --headless "+Lazy! sync" +qa 2>&1 || true
+# Compile treesitter parsers (ensure_installed + community packs: lua/python/rust/go/cpp)
+RUN nvim --headless \
+    "+TSInstallSync lua vim vimdoc bash json jsonc yaml toml markdown markdown_inline regex c cpp python rust go" \
+    +qa 2>&1 || true
 
 # Install Claude Code
 RUN curl -fsSL https://claude.ai/install.sh | bash
