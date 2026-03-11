@@ -46,6 +46,7 @@ RUN apt-get update && \
     openssh-client \
     openssh-server \
     strace \
+    rpm \
     ripgrep \
     fd-find \
     jq \
