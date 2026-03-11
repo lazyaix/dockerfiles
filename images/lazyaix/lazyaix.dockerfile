@@ -39,6 +39,10 @@ RUN nvim --headless \
     "+TSInstallSync lua vim vimdoc bash json jsonc yaml toml markdown markdown_inline regex c cpp python rust go" \
     +qa 2>&1 || true
 
+# Install Rust via rustup
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/home/lazyaix/.cargo/bin:${PATH}"
+
 # Install Claude Code
 RUN curl -fsSL https://claude.ai/install.sh | bash
 ENV PATH="/home/lazyaix/.claude/bin:$PATH"
