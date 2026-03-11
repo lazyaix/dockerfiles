@@ -41,6 +41,7 @@ RUN nvim --headless \
 
 # Install Claude Code
 RUN curl -fsSL https://claude.ai/install.sh | bash
+ENV PATH="/home/lazyaix/.claude/bin:$PATH"
 
 # Install Gemini CLI and Codex CLI
 RUN npm install -g @google/gemini-cli @openai/codex
