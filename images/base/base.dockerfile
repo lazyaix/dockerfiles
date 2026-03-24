@@ -52,7 +52,14 @@ RUN apt-get update && \
     jq \
     libevent-dev \
     libncurses-dev \
-    bison && \
+    bison \
+    flex \
+    gperf \
+    help2man \
+    libtool-bin \
+    meson \
+    texinfo \
+    gawk && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -94,5 +101,16 @@ RUN wget -O /tmp/kitware-archive.sh https://apt.kitware.com/kitware-archive.sh &
     apt-get install -y --no-install-recommends cmake cmake-curses-gui && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Install crosstool-ng from source
+ARG CT_NG_VERSION=1.28.0
+RUN curl -fsSL "https://github.com/crosstool-ng/crosstool-ng/releases/download/crosstool-ng-${CT_NG_VERSION}/crosstool-ng-${CT_NG_VERSION}.tar.xz" \
+    -o /tmp/crosstool-ng.tar.xz && \
+    tar -xJf /tmp/crosstool-ng.tar.xz -C /tmp && \
+    cd /tmp/crosstool-ng-${CT_NG_VERSION} && \
+    ./configure --prefix=/usr/local && \
+    make -j"$(nproc)" && \
+    make install && \
+    rm -rf /tmp/crosstool-ng*
 
 CMD ["/bin/bash"]
